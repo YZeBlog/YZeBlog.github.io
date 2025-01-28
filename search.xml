@@ -962,4 +962,32 @@
         <tag>新年快乐</tag>
       </tags>
   </entry>
+  <entry>
+    <title>BlogEcho-基于麦ICP备案系统开发的Rss综合聚集平台</title>
+    <url>/14.html</url>
+    <content><![CDATA[<h1 id="BlogEcho-PHP"><a href="#BlogEcho-PHP" class="headerlink" title="BlogEcho-PHP"></a>BlogEcho-PHP</h1><p>基于麦ICP备案系统开发的Rss综合聚集平台<br>开源地址：<a class="link"   href="https://github.com/YShenZe/BlogEcho-PHP" >https://github.com/YShenZe/BlogEcho-PHP<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h2 id="部署后端RssAPI"><a href="#部署后端RssAPI" class="headerlink" title="部署后端RssAPI"></a>部署后端RssAPI</h2><p>将项目中的RssAPI.py文件移动到服务器上，然后新建Python项目，运行该文件同时开放5000端口。</p>
+<p>安装依赖：</p>
+<div class="code-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">pip install mysql-connector-python beautifulsoup4 requests Flask lxml</span><br></pre></td></tr></table></figure></div>
+<p>运行项目：</p>
+<div class="code-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">python RssAPI.py</span><br></pre></td></tr></table></figure></div>
+<p>内网API地址为<a class="link"   href="http://127.0.0.1:5000/api" >http://127.0.0.1:5000/api<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h2 id="部署站点项目"><a href="#部署站点项目" class="headerlink" title="部署站点项目"></a>部署站点项目</h2><p>新建PHP站点，在数据库执行</p>
+<div class="code-container" data-rel="Sql"><figure class="iseeu highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE record_system;</span><br><span class="line"></span><br><span class="line">USE record_system;</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE TABLE</span> records (</span><br><span class="line">    id <span class="type">INT</span> AUTO_INCREMENT <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    site_name <span class="type">VARCHAR</span>(<span class="number">255</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    email <span class="type">VARCHAR</span>(<span class="number">255</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    url <span class="type">VARCHAR</span>(<span class="number">255</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    rssurl <span class="type">VARCHAR</span>(<span class="number">255</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    site_description TEXT,</span><br><span class="line">    status <span class="type">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">DEFAULT</span> <span class="string">&#x27;pending&#x27;</span>,</span><br><span class="line">    created_at <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE TABLE</span> admin_users (</span><br><span class="line">    id <span class="type">INT</span> AUTO_INCREMENT <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    username <span class="type">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    password <span class="type">VARCHAR</span>(<span class="number">255</span>) <span class="keyword">NOT NULL</span></span><br><span class="line">);</span><br><span class="line">    <span class="keyword">INSERT INTO</span> admin_users (username, password) <span class="keyword">VALUES</span> (<span class="string">&#x27;admin&#x27;</span>, <span class="string">&#x27;admin123&#x27;</span>);</span><br><span class="line">		</span><br><span class="line"><span class="keyword">CREATE TABLE</span> reports (</span><br><span class="line">    id <span class="type">INT</span> AUTO_INCREMENT <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    record_id <span class="type">INT</span> <span class="keyword">NOT NULL</span>,</span><br><span class="line">    report_reason TEXT <span class="keyword">NOT NULL</span>,</span><br><span class="line">    status ENUM(<span class="string">&#x27;pending&#x27;</span>, <span class="string">&#x27;reviewed&#x27;</span>) <span class="keyword">DEFAULT</span> <span class="string">&#x27;pending&#x27;</span>,</span><br><span class="line">    created_at <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span>,</span><br><span class="line">    <span class="keyword">FOREIGN KEY</span> (record_id) <span class="keyword">REFERENCES</span> records(id)</span><br><span class="line">);</span><br></pre></td></tr></table></figure></div>
+<p>注意，上面的“admin”和“admin123”是后期登录管理后台的用户名和密码。</p>
+<p>然后把所有文件移动到网站目录，给所有PHP文件上写好数据库信息即可访问了。</p>
+<h1 id="LICENSE"><a href="#LICENSE" class="headerlink" title="LICENSE"></a>LICENSE</h1><p>遵循上游，使用GNU GENERAL PUBLIC LICENSE开源</p>
+<blockquote>
+<p>梦泽Hexo文章模板</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>日常折腾</category>
+      </categories>
+      <tags>
+        <tag>回响</tag>
+        <tag>Rss聚合</tag>
+        <tag>BlogEcho</tag>
+      </tags>
+  </entry>
 </search>
