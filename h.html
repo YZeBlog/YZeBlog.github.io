@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hexo自动化架构设计</title>
+    <script src="https://jsdelivrcn.dev.tc/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .architecture-section {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .mermaid {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .process-flow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .flow-step {
+            background: var(--secondary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .flow-step::after {
+            content: "➔";
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .analysis-accordion {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+
+        .accordion-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .accordion-content {
+            padding: 10px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .process-flow {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-step::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Hexo自动化服务架构设计</h1>
+
+    <!-- 架构设计模型 -->
+    <div class="architecture-section">
+        <h2>架构设计模型</h2>
+        <pre class="mermaid">
+graph TD
+A[用户终端] --> B{Nginx代理层}
+B --> C[静态文件服务]
+B --> D[管理后台]
+B --> E[API服务]
+D --> F[权限验证]
+D --> G[内容管理]
+E --> H[文件操作]
+E --> I[部署引擎]
+I --> J[Git集成]
+I --> K[生成监控]
+        </pre>
+    </div>
+
+    <!-- 架构拓扑图 -->
+    <div class="architecture-section">
+        <h2>架构拓扑图</h2>
+        <pre class="mermaid">
+            graph LR
+            U[用户] --> N{Nginx 80/443}
+            N --> S[静态站点 /var/www/hexo]
+            N --> A[管理后台 :3000]
+            N --> API[API服务 :8000]
+            API --> H[Hexo Core]
+            H --> G[Git仓库]
+            H --> FS[文件系统]
+            A --> DB[(SQLite)]
+            API --> MQ[消息队列]
+            MQ --> W[Worker进程]
+        </pre>
+    </div>
+
+    <!-- 服务流程 -->
+    <div class="architecture-section">
+        <h2>架构服务流程</h2>
+        <div class="process-flow">
+            <div class="flow-step">
+                <h3>内容创作</h3>
+                <p>管理员通过Web编辑器创建Markdown文档</p>
+            </div>
+            <div class="flow-step">
+                <h3>版本控制</h3>
+                <p>API服务触发Git提交操作，保存变更历史</p>
+            </div>
+            <div class="flow-step">
+                <h3>静态生成</h3>
+                <p>Hexo生成引擎执行generate命令构建站点</p>
+            </div>
+            <div class="flow-step">
+                <h3>部署发布</h3>
+                <p>Nginx实时加载新生成的静态文件</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 深度解析 -->
+    <div class="architecture-section">
+        <h2>架构深度解析</h2>
+        <div class="analysis-accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                安全架构设计
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li>三层权限隔离：系统用户隔离、容器隔离、应用级RBAC</li>
+                    <li>操作沙箱机制：危险命令在独立线程执行</li>
+                    <li>HTTPS全链路加密</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="analysis-accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                高可用设计
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li>Nginx负载均衡：双活节点部署</li>
+                    <li>状态分离设计：/source目录独立存储</li>
+                    <li>异常恢复机制：自动回滚最后可用版本</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            content.style.display = content.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // 自动展开第一个解析项
+        document.querySelector('.accordion-header').click();
+    </script>
+</body>
+</html>
