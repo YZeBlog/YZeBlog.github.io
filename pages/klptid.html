@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>苦力怕TID跳转器</title>
+  <link href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/tailwindcss/2.2.19/tailwind.min.css" type="text/css" rel="stylesheet" />
+  <style>
+    .neumorphic-box {
+      background: #f0f0f3;
+      border-radius: 16px;
+      box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+      text-align: center;
+      padding: 16px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .neumorphic-box:hover {
+      transform: translateY(-4px);
+      box-shadow: 4px 4px 8px #d1d9e6, -4px -4px 8px #ffffff;
+    }
+
+    .neumorphic-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+      border: none;
+      margin-bottom: 16px;
+      outline: none;
+    }
+
+    .neumorphic-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      background: #f0f0f3;
+      box-shadow: 4px 4px 8px #d1d9e6, -4px -4px 8px #ffffff;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .neumorphic-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 2px 2px 4px #d1d9e6, -2px -2px 4px #ffffff;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+  <!-- 标题 -->
+  <div class="text-center mb-6">
+    <p class="text-4xl font-bold text-gray-800 mb-2">KLPTID4.1</p>
+    <p class="text-lg text-gray-500">↓点击切换模式↓</p>
+  </div>
+
+  <!-- 功能选择 -->
+  <div class="grid grid-cols-3 gap-4 w-full max-w-3xl mb-8">
+    <button class="neumorphic-box" onclick="showFunction(1)">[基础]TID跳转</button>
+    <button class="neumorphic-box" onclick="showFunction(2)">[高级]TID跳转</button>
+    <button class="neumorphic-box" onclick="showFunction(3)">[基础]页面跳转</button>
+    <button class="neumorphic-box" onclick="showFunction(4)">[高级]页面跳转</button>
+    <button class="neumorphic-box" onclick="showFunction(5)">用户UID跳转</button>
+    <button class="neumorphic-box" onclick="showFunction(6)">查看警告记录</button>
+    <button class="neumorphic-box" onclick="showFunction(7)">查看点赞人</button>
+    <button class="neumorphic-box" onclick="showFunction(8)">查看帖子</button>
+    <button class="neumorphic-box" onclick="showFunction(9)">查看回复</button>
+  </div>
+
+  <!-- 功能区 -->
+  <div id="function-area" class="w-full max-w-xl p-6 rounded-xl bg-gray-200 shadow-xl hidden space-y-6">
+    <!-- 功能内容会动态更新 -->
+  </div>
+
+  <!-- 关于 -->
+  <p class="text-center text-gray-500 underline cursor-pointer mt-6" onclick="showAbout()">关于[可点]</p>
+
+  <!-- 关于弹窗 -->
+  <div id="about-window" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 bg-gray-100 rounded-xl shadow-xl w-full max-w-lg z-50">
+    <p class="text-xl font-semibold text-gray-700 mb-4">关于 About</p>
+    <p class="text-sm text-gray-600">
+      更新日志：美化 UI 和功能补充<br>
+      版本：4.1 最终版<br>
+      作者：KLPBBS星空晶体<br>
+      Github 仓库地址：<a href="#" class="text-blue-500">点此查看</a><br>
+      <span class="text-red-500 font-bold">声明：本工具由苦力怕论坛用户制作，非官方工具。</span><br />
+      <span class="text-red-500 font-bold">新UI由@YShenZe(github.com/YShenZe)制作</span>
+    </p>
+    <button onclick="closeAbout()" class="neumorphic-btn mt-4">关闭</button>
+  </div>
+
+  <script>
+    function showFunction(id) {
+      const functionArea = document.getElementById("function-area");
+      functionArea.classList.remove("hidden");
+
+      let content = "";
+      switch (id) {
+        case 1:
+          content = `
+                        <p class="text-xl font-semibold text-gray-700">TID跳转 - 基础版</p>
+                        <input type="text" id="tid1" placeholder="请输入TID" class="neumorphic-input">
+                        <button onclick="jumpToTID('tid1')" class="neumorphic-btn">跳转</button>`;
+          break;
+        case 2:
+          content = `
+                        <p class="text-xl font-semibold text-gray-700">TID跳转 - 高级版</p>
+                        <input type="text" id="tid2" placeholder="请输入TID" class="neumorphic-input">
+                        <input type="text" id="mode2" placeholder="请输入模式 (2 或 no)" class="neumorphic-input mt-4">
+                        <button onclick="jumpToTIDAdvanced()" class="neumorphic-btn">跳转</button>`;
+          break;
+        case 3:
+          content = `
+                        <p class="text-xl font-semibold text-gray-700">页面跳转 - 基础版</p>
+                        <input type="text" id="url3" placeholder="请输入URL" class="neumorphic-input">
+                        <button onclick="jumpToPage('url3')" class="neumorphic-btn">跳转</button>`;
+          break;
+        case 4:
+          content = `
+                        <p class="text-xl font-semibold text-gray-700">页面跳转 - 高级版</p>
+                        <input type="text" id="url4" placeholder="请输入URL" class="neumorphic-input">
+                        <input type="text" id="mode4" placeholder="请输入模式" class="neumorphic-input mt-4">
+                        <button onclick="jumpToPageAdvanced()" class="neumorphic-btn">跳转</button>`;
+          break;
+        case 5:
+          content = `
+                        <p class="text-xl font-semibold text-gray-700">用户UID跳转</p>
+                        <input type="text" id="uid" placeholder="请输入UID" class="neumorphic-input">
+                        <button onclick="jumpToUID()" class="neumorphic-btn">跳转</button>`;
+          break;
+        case 6:
+          content = `
+                        <p class="text-xl font-semibold text-gray-700">查看某用户警告记录</p>
+                        <input type="text" id="uidWarning" placeholder="请输入UID" class="neumorphic-input">
+                        <button onclick="checkWarning()" class="neumorphic-btn">查看</button>`;
+          break;
+        case 7:
+          content = `
+                        <p class="text-xl font-semibold text-gray-700">查看某主题的点赞人</p>
+                        <input type="text" id="tidLike" placeholder="请输入TID" class="neumorphic-input">
+                        <button onclick="checkLikes()" class="neumorphic-btn">查看</button>`;
+          break;
+        case 8:
+          content = `
+                        <p class="text-xl font-semibold text-gray-700">查看某用户空间的帖子</p>
+                        <input type="text" id="uidPosts" placeholder="请输入UID" class="neumorphic-input">
+                        <button onclick="checkPosts()" class="neumorphic-btn">查看</button>`;
+          break;
+        case 9:
+          content = `
+                        <p class="text-xl font-semibold text-gray-700">查看某用户空间的回复</p>
+                        <input type="text" id="uidReplies" placeholder="请输入UID" class="neumorphic-input">
+                        <button onclick="checkReplies()" class="neumorphic-btn">查看</button>`;
+          break;
+        default:
+          break;
+      }
+
+      functionArea.innerHTML = content;
+    }
+
+    function showAbout() {
+      document.getElementById("about-window").classList.remove("hidden");
+    }
+
+    function closeAbout() {
+      document.getElementById("about-window").classList.add("hidden");
+    }
+
+    function jumpToTID(inputId) {
+      const tid = document.getElementById(inputId).value;
+      window.location.href = `https://klpbbs.com/thread-${tid}-1-1.html`;
+    }
+
+    function jumpToTIDAdvanced() {
+      const tid = document.getElementById("tid2").value;
+      const mode = document.getElementById("mode2").value;
+      const url = mode === "no" ? `https://klpbbs.com/thread-${tid}-1-1-no.html` : `https://klpbbs.com/thread-${tid}-1-1.html`;
+      window.location.href = url;
+    }
+
+    function jumpToPage(inputId) {
+      const url = document.getElementById(inputId).value;
+      window.location.href = url;
+    }
+
+    function jumpToPageAdvanced() {
+      const url = document.getElementById("url4").value;
+      const mode = document.getElementById("mode4").value;
+      const finalUrl = `${url}?mode=${mode}`;
+      window.location.href = finalUrl;
+    }
+
+    function jumpToUID() {
+      const uid = document.getElementById("uid").value;
+      window.location.href = `https://klpbbs.com/space-uid-${uid}.html`;
+    }
+
+    function checkWarning() {
+      const uid = document.getElementById("uidWarning").value;
+      window.location.href = `https://klpbbs.com/warnings?uid=${uid}`;
+    }
+
+    function checkLikes() {
+      const tid = document.getElementById("tidLike").value;
+      window.location.href = `https://klpbbs.com/thread-${tid}-likes.html`;
+    }
+
+    function checkPosts() {
+      const uid = document.getElementById("uidPosts").value;
+      window.location.href = `https://klpbbs.com/space-uid-${uid}-posts.html`;
+    }
+
+    function checkReplies() {
+      const uid = document.getElementById("uidReplies").value;
+      window.location.href = `https://klpbbs.com/space-uid-${uid}-replies.html`;
+    }
+  </script>
+</body>
+
+</html>
